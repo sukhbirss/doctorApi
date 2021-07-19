@@ -117,7 +117,6 @@ exports.uploadUserPhoto = upload.single('photo')
 
 exports.imagetotext = async(req,res,next) => {
 	try{
-		console.log(req.file.path)
 
 		//path of image saved
 		const image = path.join(__dirname, '../', req.file.path)
@@ -138,11 +137,6 @@ exports.imagetotext = async(req,res,next) => {
 				).then(({ data: { text } }) => {
 
 				  const data = extractData(text)
-				  console.log(data,pdfPath)
-				  console.log(text)
-				  var regex = /\d{4,6}/g;
-				  
-				  console.log("yoooooooooooooooooooooooooooooooo",text.match(regex))
 
 				  //deleting stored image
 				  fs.unlink(image, (err) => {
@@ -151,8 +145,7 @@ exports.imagetotext = async(req,res,next) => {
 					    return
 					  }
 					})
-
-
+		console.log(data)		  
 				  res.status(200).json({
 			    	status: 'success',
 			    	data,
@@ -172,7 +165,6 @@ exports.imagetotext = async(req,res,next) => {
 
 exports.images = async(req,res,next) => {
 	try{
-		console.log(req.file)
 		const pages = [`${req.file.path}`]
 		//path of pdf saved
 		const pdfPath = `/uploads/${req.user.id}-${Date.now()}.pdf`
@@ -207,7 +199,6 @@ exports.updatePatientDocuments = async(req,res,next) => {
 		const pages = [`${req.file.path}`]
 		//path of pdf saved
 		const pdfPath = `/uploads/${req.user.id}-${Date.now()}.pdf`
-		console.log(pdfPath,req.body.id)
 		//pdf package
 		imgToPDF(pages, 'A4')
 		   .pipe(fs.createWriteStream(`.${pdfPath}`));
